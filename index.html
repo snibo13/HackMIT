@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js"></script>
+  <script>
+    $(function() {
+
+      var socket = io();
+      $("#status-form").submit( (e) => {
+        //Prevent page reload
+        e.preventDefault();
+        socket.emit("status", $("#name").val(), $("#status").val());
+        //Reset text
+        $("#status").text("");
+      });
+
+      $("#message-form").submit( (e) => {
+        //Prevnt page reload
+        e.preventDefault();
+        socket.emit("message", $("#name").val(),$("#message-box").val());
+        //Reset text
+        $("#message-box").text("");
+      });
+
+      socket.on('message', (nm, msg) => {
+        var min = new Date().getMinutes();
+        if (min < 10) {
+          min = "0" + min;
+        }
+        var h = new Date().getHours() % 12;
+        let m =
+        `<li> ${h}:${min} ${nm} : ${msg} </li>`;
+        $("#messages").append(m);
+      });
+
+
+
+      socket.on('status', (nm, sts) => {
+        //statuses.push({"Name":nm, "Act": sts});
+        updateStatuses({"Name":nm, "Act": sts});
+      });
+
+      function updateStatuses(sts) {
+        //statuses.forEach((sts) => {
+          //console.log(sts["Name"]);
+          let n = `<span class="name">${sts["Name"]}</span>`;
+          //console.log(n);
+          let a = `<span class="activities">${sts["Act"]}</span>`;
+          //console.log(a);
+          $("#statuses").append("<li>" + n + " is " + a + "<\li>");
+        // });
+      }
+
+
+
+
+    });
+  </script>
+  <title>Common</title>
+</head>
+<style>
+  html,body {
+    padding: 0;
+    margin: 0;
+  }
+  body {
+    display: grid;
+    grid-template-columns: 4vw 28vw 4vw 28vw 4vw 28vw 4vw;
+  }
+  #room {
+    grid-column-start:2;
+    background-color: red;
+  }
+  #chat {
+    grid-column-start: 4;
+    background-color: blue;
+  }
+  #queue {
+    grid-column-start: 6;
+    background-color: green;
+  }
+  .section {
+    height: 100vh;
+
+  }
+  ul {
+    list-style-type: none;
+  }
+
+  #messages {
+    height: 80vh;
+    width: 75%;
+    position: relative;
+    top: 5%;
+    left: 6%;
+    background-color: white;
+    overflow: vertical;
+  }
+
+  #message-box {
+    height: 5vh;
+    width: 90%;
+    position:relative;
+    top: 5vh;
+    left:5%;
+    background-color: white;
+    border: none;
+  }
+
+  #player {
+    position: relative;
+    top: 5%;
+    width: 90%;
+    height: auto;
+    left: 5%;
+  }
+
+  #add-song {
+    position: relative;
+    top: 10%;
+    width: 90%;
+    left: 5%;
+  }
+
+  #submit-song {
+    position: relative;
+    top: 15%;
+    width: 90%;
+    left: 6%;
+  }
+
+
+</style>
+
+<body>
+  <div id="room" class="section">
+    <ul id="statuses">
+      <!-- <li><span class="name">Name</span> is <span class="activity">Studying for chem</span></li> -->
+    </ul>
+    <form id="status-form" action="">
+      <input autocomplete="off" type="text" id="name" placeholder="Name">
+      <input autocomplete="off" type="text" id="status" placeholder="What are you doing?">
+      <input type="submit">
+    </form>
+  </div>
+  <div id="chat" class="section">
+    <ul id="messages"></ul>
+    <form id="message-form"><input autocomplete="off" type="text" id="message-box"> </form>
+  </div>
+  <div id="queue" class="section">
+    <p id="now-playing">Now Playing:</p>
+    <div id="player"></div>
+    <script src="music.js"></script>
+    <input autocomplete="off" type="text" id="add-song">
+    <button id="submit-song">Add Song to Queue</button>
+  </div>
+</body>
+
+</html>
