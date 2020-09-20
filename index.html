@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap" rel="stylesheet">
   <script>
     $(function() {
 
@@ -63,26 +64,108 @@
   <title>Common</title>
 </head>
 <style>
+  html {
+    background-repeat: no-repeat;
+    background-image: linear-gradient(to right top, #00c9a7, #48d3b5, #6addc2, #87e6d0, #a2f0dd, #a3f2df, #a5f5e2, #a6f7e4, #8ef3db, #74eed2, #55eac9, #25e5bf);
+  }
   html,body {
     padding: 0;
     margin: 0;
+    font-family: 'Fira Sans', sans-serif;
+    overflow: hidden;
   }
   body {
     display: grid;
     grid-template-columns: 4vw 28vw 4vw 28vw 4vw 28vw 4vw;
   }
+
+  .frosted-glass {
+    -o-filter: blue(5px);
+    -webkit-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+    z-index: -1;
+    height: 98vh;
+    position: absolute;
+    top:1vh;
+    background-color: rgba(255,255,255,0.4);
+    /* opacity: 0.6; */
+  }
+
+
+
+  #name {
+    position: relative;
+    left: 5%;
+    width: 80%;
+    text-align: center;
+    color: black;
+    background-color: rgba(255,255,255,0.8);
+    border: none;
+    border-radius: 2.5px;
+  }
+
+  #status-form {
+    position: absolute;
+    bottom: 5vh;
+    width: 30vw;
+  }
+
+  #status {
+    position: relative;
+    left: 5%;
+    width: 58%;
+    top:1vh;
+    border-radius: 2.5px;
+    border: none;
+    background-color: rgba(255,255,255,0.8);
+
+  }
+
+  #action > input[type="submit"] {
+    position: relative;
+    left: 2vw;
+    top: 1vh;
+    padding: 3px 6px;
+    border-radius: 2.5px;
+    border: none;
+  }
+
+  #sts-heading {
+    text-align: center;
+  }
+
   #room {
     grid-column-start:2;
-    background-color: red;
   }
   #chat {
     grid-column-start: 4;
-    background-color: blue;
   }
+
+  #status-fg {
+    position: absolute;
+    top: 1vh;
+    left: 4vw;
+    border-radius: 2.5px;
+    width: 28vw;
+    height: 98vh;
+  }
+
+  #chat-fg {
+    position: absolute;
+    top: 1vh;
+    left: 36vw;
+    border-radius: 2.5px;
+    width: 28vw;
+    height: 98vh;
+  }
+
   #queue {
     grid-column-start: 6;
-    background-color: green;
+
   }
+
+
   .section {
     height: 100vh;
 
@@ -95,23 +178,49 @@
     height: 80vh;
     width: 75%;
     position: relative;
-    top: 5%;
+    /* top: 5%; */
     left: 6%;
     background-color: white;
     overflow: vertical;
+    border-radius: 2.5px;
+    text-align: left;
+    font-size: 12px;
   }
 
   #message-box {
     height: 5vh;
     width: 90%;
     position:relative;
-    top: 5vh;
+    /* top: 5vh; */
     left:5%;
     background-color: white;
     border: none;
+    border-radius: 2.5px;
+  }
+
+  #now-playing {
+    text-align: center;
+    padding-top: 0;
+    padding-bottom:0;
   }
 
   #player {
+    position: relative;
+    top: 5%;
+    width: 90%;
+    height: auto;
+    left: 5%;
+  }
+
+  #player2 {
+    position: relative;
+    top: 5%;
+    width: 90%;
+    height: auto;
+    left: 5%;
+  }
+
+  #player3 {
     position: relative;
     top: 5%;
     width: 90%;
@@ -133,30 +242,50 @@
     left: 6%;
   }
 
+  #chat-heading {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    top: 2%;
+    text-align: center;
+  }
+
 
 </style>
 
 <body>
+  <!-- <div id="chat-fg" class="frosted-glass"></div> -->
+  <!-- <div id="status-fg" class="frosted-glass"></div> -->
   <div id="room" class="section">
+    <h1 id="sts-heading">Statuses</h1>
     <ul id="statuses">
       <!-- <li><span class="name">Name</span> is <span class="activity">Studying for chem</span></li> -->
     </ul>
     <form id="status-form" action="">
       <input autocomplete="off" type="text" id="name" placeholder="Name">
-      <input autocomplete="off" type="text" id="status" placeholder="What are you doing?">
-      <input type="submit">
+      <span id="action">
+        <input autocomplete="off" type="text" id="status" placeholder="What are you doing?">
+        <input type="submit">
+      </span>
+
     </form>
   </div>
   <div id="chat" class="section">
-    <ul id="messages"></ul>
-    <form id="message-form"><input autocomplete="off" type="text" id="message-box"> </form>
+
+    <h1 id="chat-heading">Chat</h1>
+    <ul id="messages">
+      <li> Welcome to the Common Room <li>
+    </ul>
+    <form id="message-form"><input autocomplete="off" type="text" id="message-box" placeholder="Message"> </form>
   </div>
   <div id="queue" class="section">
-    <p id="now-playing">Now Playing:</p>
-    <div id="player"></div>
+    <h1 id="now-playing">Tunes</h1>
+    <div class="player" id="player"></div>
+    <div class="player" id="player2"></div>
+    <div class="player" id="player3"></div>
     <script src="music.js"></script>
-    <input autocomplete="off" type="text" id="add-song">
-    <button id="submit-song">Add Song to Queue</button>
+    <!-- <input autocomplete="off" type="text" id="add-song"> -->
+    <!-- <button id="submit-song">Add Song to Queue</button> -->
   </div>
 </body>
 
